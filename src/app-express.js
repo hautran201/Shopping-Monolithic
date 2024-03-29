@@ -1,6 +1,11 @@
 const express = require('express');
 const cors = require('cors');
 
+const customerRouter = require('./router/customer-router');
+const errorHandler = require('./utils/error-handler');
+const createHttpError = require('http-errors');
+const { NotFoundError } = require('./utils/app-error');
+
 module.exports = async (app) => {
     //middleware
     app.use(express.json());
@@ -8,9 +13,15 @@ module.exports = async (app) => {
     app.use(cors());
 
     //router
-    app.get('/', function (req, res) {
-        res.send('Welcome to Express ');
-    });
+    app.use('/api/customers', customerRouter);
 
-    //hanlder error
+    app.use((req, res, next) => {
+        // res.status(404).json({
+        //     status: 404,
+        //     message: 'API Not Found',
+        // });
+        throw new NotFoundError('Data Not Found');
+    });
+    //error handlers
+    app.use(errorHandler);
 };
