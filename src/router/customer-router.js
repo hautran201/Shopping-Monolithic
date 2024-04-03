@@ -1,14 +1,10 @@
-const { AppError } = require('../utils/app-error');
-
 const router = require('express').Router();
+const CustomerController = require('../controllers/customer-controller');
+const UserAuth = require('../middlewares/auth-middleware');
 
-router.get('/', (req, res) => {
-    // let { email } = req.body;
-    try {
-        res.json(a);
-    } catch (error) {
-        throw new AppError(error.message, 404);
-    }
-});
+router.post('/signup', CustomerController.SignUp);
+router.post('/signin', CustomerController.SignIn);
+
+router.get('/profile', UserAuth, CustomerController.Profile);
 
 module.exports = router;
