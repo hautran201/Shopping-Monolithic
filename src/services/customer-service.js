@@ -56,6 +56,54 @@ class CustomerService {
             throw new AppError('Invalid credentials', 500);
         }
     }
+
+    async GetProfile(id) {
+        try {
+            const customerInfo = await this.repository.FindCustomerById({ id });
+            console.log(id);
+            return FormatedData(customerInfo);
+        } catch (error) {
+            console.log(error.message);
+            throw new AppError('Data not found ', 404);
+        }
+    }
+
+    async AddNewAddress(id, userInputs) {
+        try {
+            const { street, postalCode, city, country } = userInputs;
+            const addressResult = await this.repository.CreateAddress({
+                id,
+                street,
+                postalCode,
+                city,
+                country,
+            });
+
+            return FormatedData(addressResult);
+        } catch (error) {
+            throw new AppError(error.message, 500);
+        }
+    }
+    async GetShopingDetails({ id }) {
+        try {
+            const existingCustomer = await this.repository.FindCustomerById({
+                id,
+            });
+            return FormatedData(existingCustomer);
+        } catch (error) {
+            throw new AppError(error.message, 500);
+        }
+    }
+
+    async GetWishlist(customerId) {
+        try {
+            const wishlist = await this.repository.GetWishlist(customerId);
+
+            return FormatedData(wishlist);
+        } catch (error) {
+            throw new AppError(error.message, 500);
+        }
+    }
 }
 
 module.exports = new CustomerService();

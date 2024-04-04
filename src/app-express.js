@@ -1,10 +1,11 @@
 const express = require('express');
 const cors = require('cors');
-
-const customerRouter = require('./router/customer-router');
 const createHttpError = require('http-errors');
+
 const { NotFoundError } = require('./utils/app-error');
 const ErrorHandler = require('./middlewares/error-handler');
+const customerRouter = require('./router/customer-router');
+const productRouter = require('./router/product-router');
 
 module.exports = async (app) => {
     //middleware
@@ -14,7 +15,7 @@ module.exports = async (app) => {
 
     //router
     app.use('/api/v1/customers', customerRouter);
-
+    app.use('/api/v1/products', productRouter);
     app.use((req, res, next) => {
         throw new NotFoundError('API Not Found');
     });

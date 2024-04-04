@@ -32,6 +32,47 @@ module.exports = {
         }
     },
     Profile: async (req, res, next) => {
-        res.send('API Profile');
+        try {
+            const id = req.user.id;
+            const data = await CustomerService.GetProfile(id);
+            res.status(200).json(data);
+        } catch (error) {
+            next(new AppError(error.message, 500));
+        }
+    },
+    AddAddress: async (req, res, next) => {
+        try {
+            const { street, postalCode, city, country } = req.body;
+            const { id } = req.user;
+
+            const data = await CustomerService.AddNewAddress(id, {
+                street,
+                postalCode,
+                city,
+                country,
+            });
+
+            res.status(200).json(data);
+        } catch (error) {
+            next(new AppError(error.message, 500));
+        }
+    },
+    GetShoppingDetail: async (req, res, next) => {
+        try {
+            const { id } = req.user;
+            const data = await CustomerService.GetShopingDetails({ id });
+            res.status(200).json(data);
+        } catch (error) {
+            next(new AppError(error.message, 500));
+        }
+    },
+    GetWishlist: async (req, res, next) => {
+        try {
+            const id = req.user.id;
+            const data = await CustomerService.GetWishlist(id);
+            res.status(200).json(data);
+        } catch (error) {
+            next(new AppError(error.message, 500));
+        }
     },
 };

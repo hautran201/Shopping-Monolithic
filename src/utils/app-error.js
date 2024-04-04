@@ -8,7 +8,8 @@ class AppError extends Error {
 
 class NotFoundError extends AppError {
     constructor(message) {
-        super(message, 404);
+        super(message);
+        this.status = 404;
     }
 }
 

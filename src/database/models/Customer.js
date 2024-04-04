@@ -27,7 +27,7 @@ const CustomerSchema = new mongoose.Schema(
                 },
             },
         ],
-        whishlist: [
+        wishlist: [
             {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'product',
