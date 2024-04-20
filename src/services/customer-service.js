@@ -1,3 +1,5 @@
+const ProductService = require('../services/product-service');
+
 const CustomerRepository = require('../database/repository/customer-repository');
 const {
     FormatedData,
@@ -19,7 +21,7 @@ class CustomerService {
 
             const passwordHash = await GeneratePassword(password, salt);
 
-            const data = await this.repository.createCustomer({
+            const data = await this.repository.CreateCustomer({
                 email,
                 password: passwordHash,
                 phone,
@@ -60,7 +62,6 @@ class CustomerService {
     async GetProfile(id) {
         try {
             const customerInfo = await this.repository.FindCustomerById({ id });
-            console.log(id);
             return FormatedData(customerInfo);
         } catch (error) {
             console.log(error.message);
@@ -101,6 +102,43 @@ class CustomerService {
 
             return FormatedData(wishlist);
         } catch (error) {
+            throw new AppError(error.message, 500);
+        }
+    }
+    async AddToWishlist(userId, productId) {
+        try {
+            const product = await ProductService.GetProductById(productId);
+
+            const wishlistResult = await this.repository.AddToWishlist(
+                userId,
+                product,
+            );
+            return FormatedData(wishlistResult);
+        } catch (error) {
+            throw new AppError(error.message, 500);
+        }
+    }
+    async GetCartDetail(customerId) {
+        try {
+            const cartResult = await this.repository.GetCartDetail(customerId);
+            return FormatedData(cartResult);
+        } catch (error) {
+            console.log(error.message);
+            throw new AppError(error.message, 500);
+        }
+    }
+    async ManagerCart(userId, productId, quantity, isRemove) {
+        try {
+            const product = await ProductService.GetProductById(productId);
+            const cartResult = await this.repository.AddCartItem(
+                userId,
+                product,
+                quantity,
+                isRemove,
+            );
+            return FormatedData(cartResult);
+        } catch (error) {
+            console.error(error.message);
             throw new AppError(error.message, 500);
         }
     }

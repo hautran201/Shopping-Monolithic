@@ -75,4 +75,57 @@ module.exports = {
             next(new AppError(error.message, 500));
         }
     },
+    GetCart: async (req, res, next) => {
+        try {
+            const userId = req.user.id;
+            const data = await CustomerService.GetCartDetail(userId);
+            res.status(200).json(data);
+        } catch (error) {
+            next(new AppError(error.message, 500));
+        }
+    },
+    AddWishlist: async (req, res, next) => {
+        try {
+            const userId = req.user.id;
+            const { productId } = req.body;
+
+            const wishlist = await CustomerService.AddToWishlist(
+                userId,
+                productId,
+            );
+            res.status(201).json(wishlist);
+        } catch (error) {
+            next(new AppError(error.message, 500));
+        }
+    },
+    AddItemToCart: async (req, res, next) => {
+        try {
+            const userId = req.user.id;
+            const { productId, quantity } = req.body;
+            const cartResult = await CustomerService.ManagerCart(
+                userId,
+                productId,
+                quantity,
+                false,
+            );
+            res.status(201).json(cartResult);
+        } catch (error) {
+            next(new AppError(error.message, 500));
+        }
+    },
+    RemoveItemToCart: async (req, res, next) => {
+        try {
+            const productId = req.params.id;
+            const userId = req.user.id;
+            const data = await CustomerService.ManagerCart(
+                userId,
+                productId,
+                0,
+                true,
+            );
+            res.status(200).json(data);
+        } catch (error) {
+            next(new AppError(error.message, 500));
+        }
+    },
 };

@@ -61,7 +61,7 @@ module.exports.ValidateSignature = async (req) => {
 
 module.exports.FormatedData = (data) => {
     if (data) {
-        console.log(data);
+        // console.log(data);
         return { data };
     } else {
         throw new NotFoundError('Data not Found!', 404);
