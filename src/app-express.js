@@ -6,6 +6,7 @@ const { NotFoundError } = require('./utils/app-error');
 const ErrorHandler = require('./middlewares/error-handler');
 const customerRouter = require('./router/customer-router');
 const productRouter = require('./router/product-router');
+const shoppingRouter = require('./router/shopping-router');
 
 module.exports = async (app) => {
     //middleware
@@ -16,6 +17,7 @@ module.exports = async (app) => {
     //router
     app.use('/api/v1/customers', customerRouter);
     app.use('/api/v1/products', productRouter);
+    app.use('/api/v1/shopping', shoppingRouter);
     app.use((req, res, next) => {
         throw new NotFoundError('API Not Found');
     });

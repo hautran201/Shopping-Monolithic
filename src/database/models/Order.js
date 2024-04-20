@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema(
     {
-        orderId: String,
         customerId: String,
         amount: Number,
         status: String,
@@ -11,7 +10,7 @@ const OrderSchema = new mongoose.Schema(
             {
                 product: {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: 'Product',
+                    ref: 'product',
                     require: true,
                 },
                 unit: { type: Number, require: true },
